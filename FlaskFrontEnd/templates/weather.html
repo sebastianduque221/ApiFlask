@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Weather</h1>
+        <p>This component demonstrates fetching data from the server.</p>
+
+        <div id="loadingMessage"><em>Loading...</em></div>
+        <table id="weatherTable" class="table" style="display:none;">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Temp. (C)</th>
+                    <th>Temp. (F)</th>
+                    <th>Summary</th>
+                </tr>
+            </thead>
+            <tbody id="weatherTableBody">
+                <!-- Las filas de la tabla se insertarán aquí dinámicamente -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        async function fetchWeatherData() {
+            try {
+                const response = await fetch("/api/weather");
+                const forecasts = await response.json();
+
+                const tableBody = document.getElementById("weatherTableBody");
+                forecasts.forEach(forecast => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${new Date(forecast.Date).toLocaleDateString()}</td>
+                        <td>${forecast.TemperatureC}</td>
+                        <td>${forecast.TemperatureF}</td>
+                        <td>${forecast.Summary}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+                // Ocultar el mensaje de carga y mostrar la tabla
+                document.getElementById("loadingMessage").style.display = "none";
+                document.getElementById("weatherTable").style.display = "table";
+            } catch (error) {
+                console.error("Error al obtener los datos del clima:", error);
+            }
+        }
+
+        // Llama a la función para cargar los datos cuando se carga la página
+        fetchWeatherData();
+    </script>
+</body>
+</html>

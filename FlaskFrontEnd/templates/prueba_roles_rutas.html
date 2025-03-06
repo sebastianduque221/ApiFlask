@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Roles y Rutas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css') }}">
+</head>
+<body>
+    <div class="container mt-4">
+        <h3>Información del Usuario</h3>
+        <div class="mb-3">
+            <strong>Email:</strong> {{ usuario_email }}
+        </div>
+        <h4>Roles:</h4>
+        <ul class="list-unstyled">
+            {% for rol in roles %}
+                <li>{{ rol }}</li>
+            {% endfor %}
+        </ul>
+        <h4>Rutas a las que tiene acceso:</h4>
+        <ul class="list-unstyled">
+            {% for ruta in rutas %}
+                <li>{{ ruta }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

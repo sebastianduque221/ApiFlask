@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Frontend</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav_menu.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main_layout.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <div class="page">
+        <div class="sidebar">
+            {% include "nav_menu.html" %}
+        </div>
+
+        <main>
+            <div class="top-row px-4">
+                <a href="https://flask.palletsprojects.com/" target="_blank">About</a>
+            </div>
+
+            <article class="content px-4">
+                {% block content %}{% endblock %}
+            </article>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Counter</h1>
+        
+        <p role="status" id="counterDisplay">Current count: 0</p>
+        
+        <button class="btn btn-primary" onclick="incrementCount()">Click me</button>
+    </div>
+
+    <script>
+        let currentCount = 0;
+
+        function incrementCount() {
+            currentCount++;
+            document.getElementById("counterDisplay").innerText = `Current count: ${currentCount}`;
+        }
+    </script>
+</body>
+</html>

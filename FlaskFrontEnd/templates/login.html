@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de Sesión</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+</head>
+<body>
+    <section class="vh-100">
+        <div class="container-fluid h-custom">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-md-9 col-lg-6 col-xl-5">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                         class="img-fluid" alt="Sample image">
+                </div>
+                <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                    <form id="loginForm">
+                        <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
+                            <p class="lead fw-normal mb-0 me-3">Sign in with</p>
+                            <button type="button" class="btn btn-primary btn-floating mx-1">
+                                <i class="fab fa-facebook-f"></i>
+                            </button>
+                            <button type="button" class="btn btn-primary btn-floating mx-1">
+                                <i class="fab fa-twitter"></i>
+                            </button>
+                            <button type="button" class="btn btn-primary btn-floating mx-1">
+                                <i class="fab fa-linkedin-in"></i>
+                            </button>
+                        </div>
+                        <div class="divider d-flex align-items-center my-4">
+                            <p class="text-center fw-bold mx-3 mb-0">Or</p>
+                        </div>
+                        <div class="form-outline mb-4">
+                            <input type="email" id="correo" class="form-control form-control-lg"
+                                   placeholder="Enter a valid email address" required />
+                            <label class="form-label" for="correo">Email address</label>
+                        </div>
+                        <div class="form-outline mb-3">
+                            <input type="password" id="contrasena" class="form-control form-control-lg"
+                                   placeholder="Enter password" required />
+                            <label class="form-label" for="contrasena">Password</label>
+                        </div>
+                        <div class="text-center text-lg-start mt-4 pt-2">
+                            <button type="button" onclick="iniciarSesion()" class="btn btn-primary btn-lg">
+                                Login
+                            </button>
+                        </div>
+                    </form>
+                    <div id="errorMessage" class="text-danger mt-3"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        async function iniciarSesion() {
+            const correo = document.getElementById("correo").value;
+            const contrasena = document.getElementById("contrasena").value;
+            const errorMessage = document.getElementById("errorMessage");
+
+            try {
+                const response = await fetch("/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ Correo: correo, Contrasena: contrasena })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Almacena el correo en `sessionStorage`
+                    sessionStorage.setItem("usuarioEmail", correo);
+                    
+                    // Almacena roles y rutas en `sessionStorage` (si están en `result`)
+                    if (result.roles) {
+                        result.roles.forEach(rol => {
+                            sessionStorage.setItem(`rol_${rol}`, rol);
+                        });
+                    }
+
+                    if (result.rutas_permitidas) {
+                        result.rutas_permitidas.forEach(ruta => {
+                            sessionStorage.setItem(`ruta_${ruta}`, ruta);
+                        });
+                    }
+
+                    // Redirige al usuario al dashboard o página de inicio
+                    window.location.href = "/dashboard";
+                } else {
+                    // Muestra el mensaje de error
+                    errorMessage.textContent = result.error || "Error al iniciar sesión";
+                }
+            } catch (error) {
+                console.error("Error en la solicitud de inicio de sesión:", error);
+                errorMessage.textContent = "Error al iniciar sesión. Intente nuevamente.";
+            }
+        }
+    </script>
+</body>
+</html>
